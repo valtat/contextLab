@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { GoalsProvider } from "./context/GoalsContext1";
 // pages & components
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -12,7 +11,6 @@ function App() {
     Boolean(localStorage.getItem("token")) || false
   );
   return (
-    <GoalsProvider>
       <div className="App">
         <BrowserRouter>
           <Navbar
@@ -49,7 +47,6 @@ function App() {
           </div>
         </BrowserRouter>
       </div>
-    </GoalsProvider>
   );
 }
 

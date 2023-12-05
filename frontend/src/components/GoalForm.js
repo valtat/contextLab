@@ -2,23 +2,23 @@ import useField from "../hooks/useField";
 import { useState, useEffect } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import useAddGoal from "../hooks/useAddGoal";
-import { useGoals } from "../context/GoalsContext1";
+
 
 const GoalForm = () => {
-  const { goals, dispatch } = useGoals();
+
   const goal = useField("text");
   const [popupOpen, setPopup] = useState(false);
   const { addGoal, isLoading, error } = useAddGoal("/api/goals");
+
+
   const handleFormSubmit = (e) => {
+   
     e.preventDefault();
-    dispatch({
-      type: "ADD_GOAL",
-      payload: { title: goal.value, time: new Date() },
-    });
-    /* e.preventDefault();
-    addGoal({ title: goal.value,time: new Date()});
-    setPopup(true); */
+    addGoal({ title: goal.value, createdAt: new Date()});
+    setPopup(true); 
   };
+
+
   useEffect(() => {
     if (!isLoading && !error) {
       setPopup(false);

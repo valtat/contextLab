@@ -13,21 +13,21 @@ const getGoals = async (req, res, next) => {
 // @route   POST /api/goals
 // @access  Private
 const setGoal = async (req, res, next) => {
-  const {title,time} = req.body;
-  if(!title || !time){
+  const {title, createdAt} = req.body;
+  if(!title || !createdAt){
     res.status(400).json({error:"Fill in all the fields"});
   }
   try {
     const goal = await Goal.create({
       user:req.user,
       title,
-      createdAt:time,
+      createdAt:createdAt,
     });
     res.status(201).json({
       id: goal._id,
       user: goal.user,
       title: goal.title,
-      createdAt: goal.time,
+      createdAt: goal.createdAt,
     });
     console.log(goal.title.length);
   } catch (error) {
@@ -43,21 +43,21 @@ const setGoal = async (req, res, next) => {
 // @route   PUT /api/goals/:id
 // @access  Private
 const updateGoal = async (req, res, next) => {
- const {title,time} = req.body;
-  if(!title || !time){
+ const {title, createdAt} = req.body;
+  if(!title || !createdAt){
     res.status(400).json({error:"Fill in all the fields"});
   }
   try {
     const goal = await Goal.findById(req.params.id);
     if(goal){
       goal.title = title;
-      goal.time = time;
+      goal.createdAt = createdAt;
       const updatedGoal = await goal.save();
       res.status(201).json({
         id: goal._id,
         user: goal.user,
         title: goal.title,
-        createdAt: goal.time,
+        createdAt: goal.createdAt,
       });
     }else{
       res.status(404).json({error:"Goal not found"});
