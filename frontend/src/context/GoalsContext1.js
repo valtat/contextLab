@@ -1,44 +1,47 @@
+import { add } from "date-fns";
 import { createContext, useContext, useReducer } from "react";
 import React from "react";
+import useAddGoal from "../hooks/useAddGoal";
 
 export const GoalsContext = createContext();
 
-export const GoalsDispatchContext = createContext();
+// export const GoalsDispatchContext = createContext();
 
-export function GoalsProvider({ children }) {
-  const [goals, dispatch] = useReducer(GoalsReducer, { goals: null });
+export function GoalsReducer(state, action) {
+  const { addGoal, isLoading, error } = useAddGoal("/api/goals");
 
-  return (
-    <GoalsContext.Provider value={{ ...goals }}>
-      <GoalsDispatchContext.Provider value={dispatch}>
-        {children}
-      </GoalsDispatchContext.Provider>
-    </GoalsContext.Provider>
-  );
-}
-
-export function useGoals() {
-  return useContext(GoalsContext);
-}
-
-export function useGoalsDispatch() {
-  return useContext(GoalsDispatchContext);
-}
-
-function GoalsReducer(goals, action) {
   switch (action.type) {
     case "SET_GOALS":
       return {
         goals: action.payload,
       };
     case "ADD_GOAL":
-      return [...goals, action.payload];
-    case "REMOVE_GOAL":
-      return goals.filter((goal) => goal.id !== action.payload);
+      addGoal(action.payload);
+      return [...state.goals, action.payload];
+    /* case "REMOVE_GOAL":
+      return goals.filter((goal) => goal.id !== action.payload); */
     default:
-      return goals;
+      return state;
   }
 }
+
+export const GoalsProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(GoalsReducer, { goals: null });
+
+  return (
+    <GoalsContext.Provider value={{ ...state, dispatch }}>
+      {children}
+    </GoalsContext.Provider>
+  );
+};
+
+export function useGoals() {
+  return useContext(GoalsContext);
+}
+
+/* export function useGoalsDispatch() {
+  return useContext(GoalsDispatchContext);
+} */
 
 /* async function initialGoals() {
   try {
@@ -56,5 +59,3 @@ function GoalsReducer(goals, action) {
     console.log(error);
   }
 } */
-
-export default GoalsContext;
