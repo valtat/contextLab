@@ -1,16 +1,26 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "./useAuthContext";
+
+
+
 export default function useLogin(url) {
+
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(null);
+    const { dispatch } = useAuthContext();
+
+
     const login = async (object) => {
+
         setIsLoading(true);
         setError(null);
+
         const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(object),
         });
+
         const user = await response.json();
     
         if (!response.ok) {
@@ -21,6 +31,7 @@ export default function useLogin(url) {
     
         localStorage.setItem("token", user.token);
         localStorage.setItem("user", JSON.stringify(user));
+        dispatch({ type: "LOGIN", payload: user });
         setIsLoading(false);
       };
 

@@ -1,45 +1,49 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+// import { useState} from "react";
 // pages & components
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Navbar from "./components/Navbar";
+import { useAuthContext } from "./hooks/useAuthContext";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    Boolean(localStorage.getItem("token")) || false
-  );
+  const { user } = useAuthContext();
+  // const [isAuthenticated, setIsAuthenticated] = useState(
+  //   Boolean(localStorage.getItem("token")) || false
+  // );
   return (
       <div className="App">
         <BrowserRouter>
           <Navbar
-            isAuthenticated={isAuthenticated}
-            setIsAuthenticated={setIsAuthenticated}
+            // isAuthenticated={isAuthenticated}
+            // setIsAuthenticated={setIsAuthenticated}
           />
           <div className="pages">
             <Routes>
               <Route
                 path="/"
-                element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
+                element={user ? <Home /> : <Navigate to="/login" />}
               />
               <Route
                 path="/login"
                 element={
-                  isAuthenticated ? (
+                  user ? (
                     <Navigate to="/" />
                   ) : (
-                    <Login setIsAuthenticated={setIsAuthenticated} />
+                    // <Login setIsAuthenticated={setIsAuthenticated} />
+                    <Login />
                   )
                 }
               />
               <Route
                 path="/signup"
                 element={
-                  isAuthenticated ? (
+                  user ? (
                     <Navigate to="/" />
                   ) : (
-                    <Signup setIsAuthenticated={setIsAuthenticated} />
+                    // <Signup setIsAuthenticated={setIsAuthenticated} />
+                    <Signup />
                   )
                 }
               />

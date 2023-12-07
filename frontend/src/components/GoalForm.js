@@ -1,29 +1,40 @@
 import useField from "../hooks/useField";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import useAddGoal from "../hooks/useAddGoal";
-
+import { useAuthContext } from "../hooks/useAuthContext";
+import { useGoalsContext } from "../hooks/useGoalsContext";
 
 const GoalForm = () => {
 
-  const goal = useField("text");
+  const { inputProps, clear } = useField("text");
   const [popupOpen, setPopup] = useState(false);
   const { addGoal, isLoading, error } = useAddGoal("/api/goals");
+  const { user } = useAuthContext();
+  const { dispatch } = useGoalsContext();
 
 
-  const handleFormSubmit = (e) => {
-   
+  const handleFormSubmit = async (e) => {   
     e.preventDefault();
-    addGoal({ title: goal.value, createdAt: new Date()});
-    setPopup(true); 
+
+    if (!user) {
+      alert("Please log in to add goals");
+      return;
+    }
+    const response = await addGoal({ title: inputProps.value, createdAt: new Date()});
+    
+    // console.log(response);
+
+    dispatch({ type: "ADD_GOAL", payload: response });
+
+    clear();
+
+   
+    
   };
 
 
-  useEffect(() => {
-    if (!isLoading && !error) {
-      setPopup(false);
-    }
-  }, [isLoading]);
+  
 
   return (
     <>
@@ -31,7 +42,7 @@ const GoalForm = () => {
         <h3>Add a New Goal</h3>
 
         <label>Text:</label>
-        <input {...goal} className="" />
+        <input {...inputProps} className="" />
         <button>Add Goal</button>
       </form>
       {popupOpen && (

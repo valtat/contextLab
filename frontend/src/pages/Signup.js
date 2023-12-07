@@ -2,26 +2,30 @@ import { useState,useEffect } from "react";
 import useField from "../hooks/useField";
 import useSignup from "../hooks/useSignup";
 import ClipLoader from "react-spinners/ClipLoader";
-import { set } from "mongoose";
-import { is } from "date-fns/locale";
-const Signup = ({setIsAuthenticated}) => {
+// import { set } from "mongoose";
+// import { is } from "date-fns/locale";
+
+
+// const Signup = ({setIsAuthenticated}) => {
+const Signup = () => {
   
   const email = useField("email");
   const password = useField("password");
   const name = useField("text");
   const [popupOpen,setPopup]= useState(false);
-
-
   const { signup, isLoading, error } = useSignup("/api/users/");
-  const handleFormSubmit = (e) => {
+
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    signup({ email: email.value, password: password.value, name: name.value });
+    await signup({ email: email.value, password: password.value, name: name.value });
     setPopup(true);
   };
   useEffect(() => {
-    if(!isLoading&&!error&&popupOpen){
+    if(!isLoading && !error && popupOpen){
       setPopup(false);
-      setIsAuthenticated(true);
+      // setIsAuthenticated(true);
+
     }
   }, [isLoading]);  
   return (

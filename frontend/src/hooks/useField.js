@@ -7,5 +7,9 @@ export default function useField(type) {
     setValue(e.target.value);
   };
 
-  return { type, value, onChange };
+  const clear = () => {
+    setValue("");
+  }
+
+  return { inputProps: { type, value, onChange }, clear };
 };

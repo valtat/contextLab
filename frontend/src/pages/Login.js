@@ -1,22 +1,31 @@
-import { set } from "mongoose";
+// import { set } from "mongoose";
 import useField from "../hooks/useField";
 import useLogin from "../hooks/useLogin";
-import { useState,useEffect} from "react";
+import { useState, useEffect} from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-const Login = ({setIsAuthenticated}) => {
+
+
+
+// const Login = ({setIsAuthenticated}) => {
+const Login = () => {
+
+
   const email = useField("email");
   const password = useField("password");
   const [popupOpen,setPopup]= useState(false);
-  const {login,isLoading, error} = useLogin("/api/users/login");
-  const handleFormSubmit = (e) => {
+  const {login, isLoading, error} = useLogin("/api/users/login");
+
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    login({ email: email.value, password: password.value });
+    await login({ email: email.value, password: password.value });
     setPopup(true);
   };
+
   useEffect(() => {
-    if(!isLoading&&!error&&popupOpen){
+    if(!isLoading && !error && popupOpen){
       setPopup(false);
-      setIsAuthenticated(true);
+      // setIsAuthenticated(true);
     }
   }, [isLoading]);  
 
@@ -30,7 +39,7 @@ const Login = ({setIsAuthenticated}) => {
       <input {...password}/>
       <button>Log in</button>
     </form>
-    {popupOpen&&<><div className="overlay"></div>
+    {popupOpen && <><div className="overlay"></div>
     <div className="popup">
       <button className={"back-btn"} onClick={()=>{setPopup(!popupOpen)}}>
       <i className="fa-solid fa-arrow-left"></i> Back
@@ -42,7 +51,7 @@ const Login = ({setIsAuthenticated}) => {
           aria-label="Loading Spinner"
           data-testid="loader"
         />
-          {!isLoading&&error&&<><h2>Something went wrong!</h2>
+          {!isLoading && error && <><h2>Something went wrong!</h2>
           <p>{error}</p></>}
       </div></>}
       </>

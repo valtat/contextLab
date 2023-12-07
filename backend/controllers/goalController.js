@@ -78,7 +78,7 @@ const deleteGoal = async (req, res, next) => {
     const goal = await Goal.findById(req.params.id);
     if(goal){
       await goal.remove();
-      res.status(201).json({message:"Goal removed"});
+      res.status(201).json({message:"Goal removed", goal: goal});
     }else{
       res.status(404).json({error:"Goal not found"});
     }

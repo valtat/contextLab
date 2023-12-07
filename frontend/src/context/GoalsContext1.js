@@ -1,5 +1,5 @@
 
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useReducer } from "react";
 import React from "react";
 
 export const GoalsContext = createContext();
@@ -8,7 +8,7 @@ export const GoalsContext = createContext();
 export const goalsReducer = (state, action) => {
 
   switch (action.type) {
-
+    
     case "SET_GOALS":
 
       return {
@@ -18,10 +18,17 @@ export const goalsReducer = (state, action) => {
     case "ADD_GOAL":
 
       return {
-        goals: [...state.goals, action.payload ]
+        goals: [action.payload, ...state.goals ]
       };
-    /* case "REMOVE_GOAL":
-      return goals.filter((goal) => goal.id !== action.payload); */
+
+    case "REMOVE_GOAL":
+      
+
+      return {
+        goals: state.goals.filter((goal) => goal._id !== action.payload)
+      };
+      
+
     default:
       return state;
   }

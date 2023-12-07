@@ -2,7 +2,7 @@ import { GoalsContext } from "../context/GoalsContext1";
 import { useContext } from "react";
 
 
-export function useGoals() {
+export function useGoalsContext() {
     const context = useContext(GoalsContext);
 
     if (!context) {

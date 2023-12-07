@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useGoals} from "./useGoalsContext";
 
 
 
 
 export default function useAddGoal(url) {
 
-  const { goals, dispatch } = useGoals();
+
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
 
@@ -29,9 +28,12 @@ export default function useAddGoal(url) {
       setError(goal.error);
       setIsLoading(false);
       return error;
+    } else {
+      setIsLoading(false);
+      // dispatch({ type: "ADD_GOAL", payload: goal });
+      return goal;
     }
-    setIsLoading(false);
-    dispatch({ type: "ADD_GOAL", payload: goal });
+    
   };
 
   return { addGoal, isLoading, error };
